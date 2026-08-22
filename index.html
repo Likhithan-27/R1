@@ -11,7 +11,8 @@
   <meta property="og:description" content="Accessible, semantic and responsive web development portfolio.">
   <meta property="og:type" content="website">
   <title>Likhitha | Web Developer Portfolio</title>
-<link rel="stylesheet" href="style.css"></head>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="site-header">
@@ -19,11 +20,20 @@
     <a class="logo" href="index.html" aria-label="Likhitha home">Likhitha</a>
     <ul class="nav-list">
       <li><a href="index.html" aria-current="page">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+<li><a href="about.html">About</a></li>
+<li><a href="projects.html">Projects</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+
+<button
+    type="button"
+    id="theme-toggle"
+    aria-label="Switch to dark mode"
+    aria-pressed="false">
+    🌙 Dark Mode
+</button>
+
+</nav>
 </header>
 
 <main id="main-content">
@@ -77,5 +87,6 @@
     <a href="contact.html">Get in touch</a>
   </div>
 </footer>
+<script src="assets/css/script.js"></script>
 </body>
 </html>

@@ -28,7 +28,6 @@ A multi-page personal portfolio built for the Thiranex web development internshi
 4. Run Lighthouse in Chrome DevTools and fix any warnings.
 5. Publish the folder using GitHub Pages, Netlify, or another static hosting service.
 6. Submit the published URL to Thiranex.
-7. GitHub Pages deployment check.
 
 ## Important
 The form action is intentionally a placeholder. For a working online form, connect it to your preferred form backend before submission.
