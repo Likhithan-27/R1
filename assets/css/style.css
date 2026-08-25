@@ -627,3 +627,146 @@ html[data-theme="dark"] h3 {
 [data-theme="dark"] .site-footer a {
     color: #ffffff;
 }
+/* =========================================
+   TO-DO LIST
+   ========================================= */
+
+.todo-form {
+    max-width: 800px;
+    margin-block: 2rem;
+}
+
+.todo-form label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.todo-input-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.todo-input-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.8rem 1rem;
+    border: 2px solid #d0d7de;
+    border-radius: 0.5rem;
+    font: inherit;
+    background: #fff;
+    color: inherit;
+}
+
+.todo-input-row button,
+.todo-filters button,
+.todo-actions button {
+    padding: 0.7rem 1rem;
+    border: 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.todo-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-block: 1.5rem;
+}
+
+.todo-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-button.active {
+    outline: 3px solid #f59e0b;
+    outline-offset: 2px;
+}
+
+.todo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #d0d7de;
+    border-radius: 0.75rem;
+    background: #fff;
+}
+
+.todo-task {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.todo-task span {
+    overflow-wrap: anywhere;
+}
+
+.todo-task .completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.todo-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.empty-state {
+    padding: 2rem;
+    text-align: center;
+    opacity: 0.7;
+}
+
+/* Dark mode */
+
+[data-theme="dark"] .todo-input-row input,
+[data-theme="dark"] .todo-item {
+    background: #172033;
+    color: #fff;
+    border-color: #475569;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .todo-input-row {
+        flex-direction: column;
+    }
+
+    .todo-controls {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .todo-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .todo-actions {
+        width: 100%;
+    }
+
+    .todo-actions button {
+        flex: 1;
+    }
+}
