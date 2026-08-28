@@ -1,25 +1,29 @@
-/* =================================
+/* ========================================
    LIGHT / DARK MODE TOGGLE
-   ================================= */
+======================================== */
 
 const themeToggle = document.getElementById("theme-toggle");
 
 if (themeToggle) {
     const savedTheme = localStorage.getItem("theme");
 
+    // Load saved theme
     if (savedTheme === "dark") {
         document.documentElement.setAttribute("data-theme", "dark");
+
         themeToggle.textContent = "☀️ Light Mode";
         themeToggle.setAttribute("aria-label", "Switch to light mode");
         themeToggle.setAttribute("aria-pressed", "true");
     }
 
+    // Toggle theme
     themeToggle.addEventListener("click", () => {
         const isDark =
             document.documentElement.getAttribute("data-theme") === "dark";
 
         if (isDark) {
             document.documentElement.removeAttribute("data-theme");
+
             localStorage.setItem("theme", "light");
 
             themeToggle.textContent = "🌙 Dark Mode";
@@ -27,6 +31,7 @@ if (themeToggle) {
             themeToggle.setAttribute("aria-pressed", "false");
         } else {
             document.documentElement.setAttribute("data-theme", "dark");
+
             localStorage.setItem("theme", "dark");
 
             themeToggle.textContent = "☀️ Light Mode";
@@ -35,260 +40,377 @@ if (themeToggle) {
         }
     });
 }
-/* =========================================
-   TO-DO LIST APPLICATION
-   ========================================= */
 
+
+/* ========================================
+   TO-DO LIST - STATE
+======================================== */
+
+const taskInput = document.getElementById("todo-input");
+const addTaskButton = document.getElementById("add-task");
+const taskList = document.getElementById("todo-list");
+const emptyMessage = document.getElementById("empty-message");
 const todoForm = document.getElementById("todo-form");
-const todoInput = document.getElementById("todo-input");
-const todoList = document.getElementById("todo-list");
-const todoCount = document.getElementById("todo-count");
-const emptyState = document.getElementById("empty-state");
-const filterButtons = document.querySelectorAll(".filter-button");
 
-if (todoForm && todoInput && todoList) {
+const filterButtons = document.querySelectorAll("[data-filter]");
 
-    let tasks = JSON.parse(localStorage.getItem("todoTasks")) || [];
-    let currentFilter = "all";
 
-    function saveTasks() {
-        localStorage.setItem("todoTasks", JSON.stringify(tasks));
+// Load tasks from localStorage
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+
+// Current filter
+let currentFilter = "all";
+
+
+/* ========================================
+   SAVE TASKS
+======================================== */
+
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+
+/* ========================================
+   RENDER TASKS
+======================================== */
+
+function renderTasks() {
+
+    // Clear current tasks
+    taskList.innerHTML = "";
+
+    let filteredTasks = tasks;
+
+
+    // Active tasks
+    if (currentFilter === "active") {
+        filteredTasks = tasks.filter(task => !task.completed);
     }
 
-    function createTask(text) {
-        return {
-            id: Date.now().toString(),
-            text: text,
-            completed: false
-        };
+
+    // Completed tasks
+    if (currentFilter === "completed") {
+        filteredTasks = tasks.filter(task => task.completed);
     }
 
-    function getFilteredTasks() {
 
-        if (currentFilter === "active") {
-            return tasks.filter(task => !task.completed);
+    // Show empty message
+    if (filteredTasks.length === 0) {
+
+        if (emptyMessage) {
+            emptyMessage.hidden = false;
         }
 
-        if (currentFilter === "completed") {
-            return tasks.filter(task => task.completed);
-        }
-
-        return tasks;
+        return;
     }
 
-    function renderTasks() {
 
-        todoList.innerHTML = "";
-
-        const filteredTasks = getFilteredTasks();
-
-        filteredTasks.forEach(task => {
-
-            const li = document.createElement("li");
-
-            li.className = "todo-item";
-            li.dataset.id = task.id;
-
-            li.innerHTML = `
-                <label class="todo-task">
-                    <input
-                        type="checkbox"
-                        data-action="toggle"
-                        ${task.completed ? "checked" : ""}
-                    >
-
-                    <span class="${task.completed ? "completed" : ""}">
-                        ${escapeHTML(task.text)}
-                    </span>
-                </label>
-
-                <div class="todo-actions">
-                    <button
-                        type="button"
-                        data-action="edit"
-                        aria-label="Edit task"
-                    >
-                        Edit
-                    </button>
-
-                    <button
-                        type="button"
-                        data-action="delete"
-                        aria-label="Delete task"
-                    >
-                        Delete
-                    </button>
-                </div>
-            `;
-
-            todoList.appendChild(li);
-        });
-
-        updateCount(filteredTasks.length);
-
-        emptyState.hidden = filteredTasks.length !== 0;
+    // Hide empty message
+    if (emptyMessage) {
+        emptyMessage.hidden = true;
     }
 
-    function updateCount(count) {
 
-        todoCount.textContent =
-            `${count} ${count === 1 ? "task" : "tasks"}`;
+    // Create task elements
+    filteredTasks.forEach(task => {
+
+        const li = document.createElement("li");
+
+        li.className = "task-item";
+
+        li.dataset.id = task.id;
+
+
+        li.innerHTML = `
+            <input
+                type="checkbox"
+                class="task-checkbox"
+                ${task.completed ? "checked" : ""}
+                aria-label="Mark task as completed"
+            >
+
+            <span class="task-text ${task.completed ? "completed" : ""}">
+                ${escapeHTML(task.text)}
+            </span>
+
+            <button
+                type="button"
+                class="edit-task"
+                aria-label="Edit task"
+            >
+                Edit
+            </button>
+
+            <button
+                type="button"
+                class="delete-task"
+                aria-label="Delete task"
+            >
+                Delete
+            </button>
+        `;
+
+
+        taskList.appendChild(li);
+    });
+}
+
+
+/* ========================================
+   ADD TASK
+======================================== */
+
+function addTask() {
+
+    const text = taskInput.value.trim();
+
+
+    // Do nothing if input is empty
+    if (text === "") {
+        taskInput.focus();
+        return;
     }
 
-    function escapeHTML(text) {
 
-        const div = document.createElement("div");
+    // Create new task
+    const newTask = {
+        id: Date.now(),
+        text: text,
+        completed: false
+    };
 
-        div.textContent = text;
 
-        return div.innerHTML;
-    }
+    // Add task to array
+    tasks.push(newTask);
 
-    /* CREATE */
 
-    todoForm.addEventListener("submit", function (event) {
+    // Save tasks
+    saveTasks();
+
+
+    // Update screen
+    renderTasks();
+
+
+    // Clear input
+    taskInput.value = "";
+
+
+    // Focus input again
+    taskInput.focus();
+}
+
+
+/* ========================================
+   ADD TASK BUTTON
+======================================== */
+
+if (addTaskButton) {
+
+    addTaskButton.addEventListener("click", () => {
+        addTask();
+    });
+}
+
+
+/* ========================================
+   FORM SUBMIT
+======================================== */
+
+if (todoForm) {
+
+    todoForm.addEventListener("submit", event => {
 
         event.preventDefault();
 
-        const text = todoInput.value.trim();
-
-        if (!text) {
-            return;
-        }
-
-        const newTask = createTask(text);
-
-        tasks.push(newTask);
-
-        saveTasks();
-
-        todoInput.value = "";
-
-        renderTasks();
-
-        todoInput.focus();
+        addTask();
     });
+}
 
-    /* UPDATE + DELETE + TOGGLE
-       Event delegation
-    */
 
-    todoList.addEventListener("click", function (event) {
+/* ========================================
+   ENTER KEY
+======================================== */
 
-        const button = event.target.closest("button");
+if (taskInput) {
 
-        if (!button) {
-            return;
+    taskInput.addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            addTask();
         }
+    });
+}
 
-        const taskItem = button.closest(".todo-item");
 
+/* ========================================
+   TASK ACTIONS
+   COMPLETE / EDIT / DELETE
+======================================== */
+
+if (taskList) {
+
+    taskList.addEventListener("click", event => {
+
+        const taskItem = event.target.closest(".task-item");
+
+
+        // If task item does not exist
         if (!taskItem) {
             return;
         }
 
-        const taskId = taskItem.dataset.id;
 
-        const task = tasks.find(task => task.id === taskId);
+        const taskId = Number(taskItem.dataset.id);
 
-        if (!task) {
+
+        /* ============================
+           COMPLETE TASK
+        ============================ */
+
+        if (event.target.classList.contains("task-checkbox")) {
+
+            tasks = tasks.map(task => {
+
+                if (task.id === taskId) {
+
+                    return {
+                        ...task,
+                        completed: event.target.checked
+                    };
+                }
+
+                return task;
+            });
+
+
+            saveTasks();
+
+            renderTasks();
+
             return;
         }
 
-        const action = button.dataset.action;
 
-        /* UPDATE */
+        /* ============================
+           DELETE TASK
+        ============================ */
 
-        if (action === "edit") {
+        if (event.target.classList.contains("delete-task")) {
+
+            tasks = tasks.filter(task => task.id !== taskId);
+
+
+            saveTasks();
+
+            renderTasks();
+
+            return;
+        }
+
+
+        /* ============================
+           EDIT TASK
+        ============================ */
+
+        if (event.target.classList.contains("edit-task")) {
+
+            const task = tasks.find(task => task.id === taskId);
+
+
+            if (!task) {
+                return;
+            }
+
 
             const updatedText = prompt(
                 "Edit your task:",
                 task.text
             );
 
+
+            // If user clicks Cancel
             if (updatedText === null) {
                 return;
             }
 
-            const cleanText = updatedText.trim();
 
-            if (!cleanText) {
+            const trimmedText = updatedText.trim();
+
+
+            // Don't allow empty task
+            if (trimmedText === "") {
                 return;
             }
 
-            task.text = cleanText;
 
-            saveTasks();
+            // Update task
+            task.text = trimmedText;
 
-            renderTasks();
-        }
-
-        /* DELETE */
-
-        if (action === "delete") {
-
-            tasks = tasks.filter(
-                task => task.id !== taskId
-            );
 
             saveTasks();
 
             renderTasks();
         }
     });
+}
 
-    /* TOGGLE COMPLETED */
 
-    todoList.addEventListener("change", function (event) {
+/* ========================================
+   FILTER BUTTONS
+======================================== */
 
-        if (!event.target.matches('[data-action="toggle"]')) {
-            return;
-        }
+filterButtons.forEach(button => {
 
-        const taskItem = event.target.closest(".todo-item");
+    button.addEventListener("click", () => {
 
-        const taskId = taskItem.dataset.id;
+        // Get selected filter
+        currentFilter = button.dataset.filter;
 
-        const task = tasks.find(task => task.id === taskId);
 
-        if (!task) {
-            return;
-        }
+        // Remove active state
+        filterButtons.forEach(btn => {
 
-        task.completed = event.target.checked;
+            btn.removeAttribute("aria-current");
 
-        saveTasks();
+            btn.classList.remove("active");
+        });
 
+
+        // Add active state
+        button.setAttribute("aria-current", "true");
+
+        button.classList.add("active");
+
+
+        // Render filtered tasks
         renderTasks();
     });
+});
 
-    /* FILTER */
 
-    filterButtons.forEach(button => {
+/* ========================================
+   ESCAPE HTML
+   Prevents HTML from being inserted
+======================================== */
 
-        button.addEventListener("click", function () {
+function escapeHTML(text) {
 
-            currentFilter = button.dataset.filter;
+    const div = document.createElement("div");
 
-            filterButtons.forEach(filterButton => {
+    div.textContent = text;
 
-                const isActive =
-                    filterButton === button;
-
-                filterButton.classList.toggle(
-                    "active",
-                    isActive
-                );
-
-                filterButton.setAttribute(
-                    "aria-pressed",
-                    String(isActive)
-                );
-            });
-
-            renderTasks();
-        });
-    });
-
-    renderTasks();
+    return div.innerHTML;
 }
+
+
+/* ========================================
+   INITIAL RENDER
+======================================== */
+
+renderTasks();
