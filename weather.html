@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="A real-time weather dashboard built using JavaScript, Fetch API and asynchronous programming.">
+
+    <title>Weather Dashboard | Likhitha</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+    <a class="skip-link" href="#main-content">
+        Skip to main content
+    </a>
+
+    <!-- Header -->
+    <header class="site-header">
+
+        <nav class="container nav"
+            aria-label="Primary navigation">
+
+            <a class="logo"
+                href="index.html">
+                Likhitha
+            </a>
+
+            <ul class="nav-list">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="about.html">About</a>
+                </li>
+
+                <li>
+                    <a href="projects.html">Projects</a>
+                </li>
+
+                <li>
+                    <a href="todo.html">To-Do</a>
+                </li>
+
+                <li>
+                    <a href="weather.html"
+                        aria-current="page">
+                        Weather
+                    </a>
+                </li>
+
+                <li>
+                    <a href="contact.html">Contact</a>
+                </li>
+
+            </ul>
+
+            <button
+                type="button"
+                id="theme-toggle"
+                aria-label="Switch to dark mode"
+                aria-pressed="false">
+
+                🌙 Dark Mode
+
+            </button>
+
+        </nav>
+
+    </header>
+
+
+    <!-- Main Content -->
+
+    <main id="main-content">
+
+        <section class="page-header container">
+
+            <p class="eyebrow">
+                Asynchronous JavaScript & REST APIs
+            </p>
+
+            <h1>
+                Weather Dashboard
+            </h1>
+
+            <p class="lead">
+                Search for a city to view current weather information.
+            </p>
+
+        </section>
+
+
+        <!-- Weather Search -->
+
+        <section
+            class="section container"
+            aria-labelledby="weather-search-title">
+
+            <div class="weather-card">
+
+                <h2 id="weather-search-title">
+                    Search Weather
+                </h2>
+
+
+                <div class="weather-search">
+
+                    <label
+                        for="city-input"
+                        class="visually-hidden">
+
+                        Enter city name
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="city-input"
+                        placeholder="Enter a city name"
+                        autocomplete="off">
+
+
+                    <button
+                        id="search-weather"
+                        class="button"
+                        type="button">
+
+                        Search
+
+                    </button>
+
+                </div>
+
+
+                <!-- Message -->
+
+                <p
+                    id="weather-message"
+                    role="status"
+                    aria-live="polite">
+
+                </p>
+
+
+                <!-- Weather Result -->
+
+                <div
+                    id="weather-result"
+                    class="weather-result"
+                    hidden>
+
+                    <h2 id="city-name"></h2>
+
+
+                    <div class="weather-grid">
+
+                        <article class="weather-item">
+
+                            <h3>🌡️ Temperature</h3>
+
+                            <p id="temperature">
+                                --
+                            </p>
+
+                        </article>
+
+
+                        <article class="weather-item">
+
+                            <h3>💧 Humidity</h3>
+
+                            <p id="humidity">
+                                --
+                            </p>
+
+                        </article>
+
+
+                        <article class="weather-item">
+
+                            <h3>💨 Wind Speed</h3>
+
+                            <p id="wind-speed">
+                                --
+                            </p>
+
+                        </article>
+
+
+                        <article class="weather-item">
+
+                            <h3>☁️ Condition</h3>
+
+                            <p id="weather-condition">
+                                --
+                            </p>
+
+                        </article>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <footer class="site-footer">
+
+        <div class="container footer-content">
+
+            <p>
+                &copy; 2026 Likhitha.
+            </p>
+
+            <a href="index.html">
+                Home
+            </a>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+
+    <script src="assets/js/script.js"></script>
+
+</body>
+
+</html>
