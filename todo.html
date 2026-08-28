@@ -1,13 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
-        content="Interactive To-Do List application with CRUD operations and local storage."
-    >
+    <meta name="description" content="Interactive To-Do List application with CRUD operations and local storage.">
 
     <title>To-Do List | Likhitha</title>
 
@@ -16,141 +14,110 @@
 
 <body>
 
-<a class="skip-link" href="#main-content">Skip to content</a>
-
-<header class="site-header">
-    <div class="container">
-        <nav class="nav" aria-label="Main navigation">
-
-            <a class="logo" href="index.html">Likhitha</a>
-
-            <ul class="nav-list">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="todo.html" aria-current="page">To-Do</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-
-            <button
-                id="theme-toggle"
-                type="button"
-                aria-label="Switch to dark mode"
-                aria-pressed="false"
-            >
-                🌙 Dark Mode
-            </button>
-
-        </nav>
-    </div>
-</header>
-
-<main id="main-content">
-
-    <section class="page-header">
+    <header class="site-header">
         <div class="container">
-            <p class="eyebrow">JavaScript Project</p>
-            <h1>My To-Do List</h1>
-            <p>
-                Manage your tasks with CRUD operations, filtering,
-                and browser local storage.
-            </p>
+            <nav class="nav" aria-label="Primary navigation">
+                <a class="logo" href="index.html">Likhitha</a>
+
+                <ul class="nav-list">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="todo.html" aria-current="page">To-Do</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
         </div>
-    </section>
+    </header>
 
-    <section class="section container" aria-labelledby="todo-title">
+    <main id="main-content">
+        <section class="section container" aria-labelledby="todo-title">
 
-        <h2 id="todo-title">Task Manager</h2>
+            <h1 id="todo-title">My To-Do List</h1>
 
-        <form id="todo-form" class="todo-form">
-            <label for="todo-input">New task</label>
+            <p>
+                Add, complete, edit, delete and filter your tasks.
+                Your tasks are automatically saved in your browser.
+            </p>
 
-            <div class="todo-input-row">
+            <!-- Add Task Form -->
+            <form id="todo-form" aria-label="Add a new task">
+
+                <label for="todo-input">Task</label>
+
                 <input
+                    type="text"
                     id="todo-input"
                     name="task"
-                    type="text"
                     placeholder="Enter a task..."
                     required
-                    maxlength="120"
                     autocomplete="off"
                 >
 
-                <button type="submit">
+                <button type="submit" id="add-task">
                     Add Task
                 </button>
-            </div>
-        </form>
 
-        <div class="todo-controls">
+            </form>
 
-            <div
-                class="todo-filters"
-                role="group"
-                aria-label="Filter tasks"
-            >
+            <!-- Filters -->
+            <div class="todo-filters" aria-label="Task filters">
+
                 <button
                     type="button"
-                    class="filter-button active"
-                    data-filter="all"
-                    aria-pressed="true"
-                >
+                    class="filter-btn active"
+                    data-filter="all">
                     All
                 </button>
 
                 <button
                     type="button"
-                    class="filter-button"
-                    data-filter="active"
-                    aria-pressed="false"
-                >
+                    class="filter-btn"
+                    data-filter="active">
                     Active
                 </button>
 
                 <button
                     type="button"
-                    class="filter-button"
-                    data-filter="completed"
-                    aria-pressed="false"
-                >
+                    class="filter-btn"
+                    data-filter="completed">
                     Completed
                 </button>
+
             </div>
 
-            <p id="todo-count" aria-live="polite">
-                0 tasks
+            <!-- Task List -->
+            <section aria-labelledby="tasks-title">
+
+                <h2 id="tasks-title">Tasks</h2>
+
+                <ul
+                    id="todo-list"
+                    class="todo-list"
+                    aria-live="polite">
+                </ul>
+
+                <p id="empty-message">
+                    No tasks yet. Add your first task!
+                </p>
+
+            </section>
+
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>
+                &copy; 2026 Likhitha. Built for the JavaScript Logic &amp;
+                State Management task.
             </p>
-
         </div>
+    </footer>
 
-        <ul
-            id="todo-list"
-            class="todo-list"
-            aria-label="To-do tasks"
-        ></ul>
-
-        <p
-            id="empty-state"
-            class="empty-state"
-            aria-live="polite"
-        >
-            No tasks yet. Add your first task!
-        </p>
-
-    </section>
-
-</main>
-
-<footer class="site-footer">
-    <div class="container">
-        <p>
-            &copy; 2026 Likhitha. Built for the Thiranex web development
-            internship task.
-        </p>
-    </div>
-</footer>
-
-<script src="assets/js/script.js"></script>
+    <!-- JavaScript -->
+    <script src="assets/js/script.js"></script>
 
 </body>
 </html>
+
