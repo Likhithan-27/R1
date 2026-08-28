@@ -78,6 +78,7 @@ function saveTasks() {
 
 function renderTasks() {
 
+    if (!taskList) return;
     // Clear current tasks
     taskList.innerHTML = "";
 
@@ -414,3 +415,264 @@ function escapeHTML(text) {
 ======================================== */
 
 renderTasks();
+
+
+
+
+
+
+/* ========================================
+   WEATHER DASHBOARD
+======================================== */
+
+const cityInput = document.getElementById("city-input");
+const searchWeatherButton = document.getElementById("search-weather");
+const weatherMessage = document.getElementById("weather-message");
+const weatherResult = document.getElementById("weather-result");
+
+const cityName = document.getElementById("city-name");
+const temperature = document.getElementById("temperature");
+const humidity = document.getElementById("humidity");
+const windSpeed = document.getElementById("wind-speed");
+const weatherCondition = document.getElementById("weather-condition");
+
+
+async function getWeather() {
+
+    const city = cityInput.value.trim();
+
+
+    if (city === "") {
+
+        weatherMessage.textContent =
+            "Please enter a city name.";
+
+        weatherResult.hidden = true;
+
+        return;
+
+    }
+
+
+    weatherMessage.textContent =
+        "Searching for weather...";
+
+
+    weatherResult.hidden = true;
+
+
+    try {
+
+        /* ========================================
+           STEP 1: FIND CITY COORDINATES
+        ======================================== */
+
+        const locationResponse = await fetch(
+
+            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`
+
+        );
+
+
+        if (!locationResponse.ok) {
+
+            throw new Error(
+                "Unable to connect to the location service."
+            );
+
+        }
+
+
+        const locationData =
+            await locationResponse.json();
+
+
+        if (
+            !locationData.results ||
+            locationData.results.length === 0
+        ) {
+
+            throw new Error(
+                "City not found. Please try again."
+            );
+
+        }
+
+
+        const location =
+            locationData.results[0];
+
+
+        const latitude =
+            location.latitude;
+
+        const longitude =
+            location.longitude;
+
+
+        /* ========================================
+           STEP 2: FETCH WEATHER DATA
+        ======================================== */
+
+        const weatherResponse = await fetch(
+
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`
+
+        );
+
+
+        if (!weatherResponse.ok) {
+
+            throw new Error(
+                "Unable to retrieve weather data."
+            );
+
+        }
+
+
+        const weatherData =
+            await weatherResponse.json();
+
+
+        /* ========================================
+           STEP 3: EXTRACT JSON DATA
+        ======================================== */
+
+        const currentWeather =
+            weatherData.current;
+
+
+        /* ========================================
+           STEP 4: DISPLAY WEATHER DATA
+        ======================================== */
+
+        cityName.textContent =
+            `${location.name}, ${location.country}`;
+
+
+        temperature.textContent =
+            `${currentWeather.temperature_2m} °C`;
+
+
+        humidity.textContent =
+            `${currentWeather.relative_humidity_2m} %`;
+
+
+        windSpeed.textContent =
+            `${currentWeather.wind_speed_10m} km/h`;
+
+
+        weatherCondition.textContent =
+            getWeatherDescription(
+                currentWeather.weather_code
+            );
+
+
+        weatherMessage.textContent = "";
+
+
+        weatherResult.hidden = false;
+
+
+    } catch (error) {
+
+        weatherMessage.textContent =
+            error.message;
+
+
+        weatherResult.hidden = true;
+
+    }
+
+}
+
+
+/* ========================================
+   WEATHER CODE DESCRIPTIONS
+======================================== */
+
+function getWeatherDescription(code) {
+
+    const weatherCodes = {
+
+        0: "Clear sky",
+
+        1: "Mainly clear",
+
+        2: "Partly cloudy",
+
+        3: "Overcast",
+
+        45: "Fog",
+
+        48: "Depositing rime fog",
+
+        51: "Light drizzle",
+
+        53: "Moderate drizzle",
+
+        55: "Heavy drizzle",
+
+        61: "Slight rain",
+
+        63: "Moderate rain",
+
+        65: "Heavy rain",
+
+        71: "Slight snow",
+
+        73: "Moderate snow",
+
+        75: "Heavy snow",
+
+        80: "Rain showers",
+
+        81: "Moderate rain showers",
+
+        82: "Violent rain showers",
+
+        95: "Thunderstorm"
+
+    };
+
+
+    return weatherCodes[code] ||
+        "Unknown weather condition";
+
+}
+
+
+/* ========================================
+   SEARCH BUTTON EVENT
+======================================== */
+
+if (searchWeatherButton) {
+
+    searchWeatherButton.addEventListener(
+        "click",
+        getWeather
+    );
+
+}
+
+
+/* ========================================
+   ENTER KEY EVENT
+======================================== */
+
+if (cityInput) {
+
+    cityInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Enter") {
+
+                getWeather();
+
+            }
+
+        }
+    );
+
+}
